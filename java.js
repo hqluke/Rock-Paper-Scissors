@@ -3,7 +3,7 @@ console.log("Hello World")
     let computerScore = 0;
     let totalPlayed = 0;
 
-    //in the let game ... i didn't add in the result and total games played into html.
+
     //also could add da flex to the css but idk if i will.
 
 function computerRandom(){
@@ -27,6 +27,8 @@ function getComputerChoice(){
    }
    console.log (`computer: ${computerChoice}`)
    return computerChoice;
+
+
    
 }
     let game = document.querySelector("#button");
@@ -36,9 +38,6 @@ function getComputerChoice(){
         switch(target.id) {
         case 'rock':
             hum = "rock";
-            console.log('Rock was clicked');
-            console.log(`-------Round Results-------\n`)
-            console.log(`player: ${hum}`)
             computerSelection = getComputerChoice()
             totalPlayed++;
             playRound(hum,computerSelection);
@@ -47,7 +46,7 @@ function getComputerChoice(){
             hum = "paper";
             console.log('Paper was clicked');
             console.log(`-------Round Results-------\n`)
-            console.log(`player: ${hum}`)
+            console.log(`player: ${hum}\ncomputer: ${computerSelection}`)
             computerSelection = getComputerChoice()
             totalPlayed++;
             playRound(hum,computerSelection);
@@ -64,13 +63,16 @@ function getComputerChoice(){
     }
     });
     
+function total(){
+    return `Total Rounds Played: ${totalPlayed}\n`
+}
 
 function winText() {
-  return `nice job!\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+  return `You won the Round!\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
 }
 
 function loseText() {
-  return `LLLLLLLL\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+  return `You lost the round :(\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
 }
 
 function rockTie() {
@@ -85,36 +87,44 @@ function scissorsTie() {
   return `You both picked scissors.\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
 }
 
+   function selection(human, computer){
+    return `-------Round ${totalPlayed}-------\nPlayer: ${human}\nComputer: ${computer}\n`
+   }
+
 let resultDiv = document.querySelector("#result")
-function humanWin(){
+function humanWin(human, computer){
    let para = document.createElement("p");
    para.classList.add(`p${totalPlayed}`);
-   para.textContent = winText();
+   para.textContent += selection(human, computer);
+   para.textContent += winText();
    resultDiv.appendChild(para);
    if (humanScore === 5){endGame("human");} 
 }
 
-function computerWin(){
+function computerWin(human, computer){
    let para = document.createElement("p");
-   para.classList.add(`p${totalPlayed}`);
-   para.textContent = loseText();
+   para.classList.add(`p${totalPlayed}`)
+   para.textContent += selection(human, computer);
+   para.textContent += loseText();
    resultDiv.appendChild(para);
    if (computerScore === 5){endGame("computer");} 
 }
 
-function tie(type){
+function tie(human, computer){
    let para = document.createElement("p");
    para.classList.add(`p${totalPlayed}`);
-   switch(type){
+   switch(human){
     case "rock":
-        para.textContent = rockTie();
+        para.textContent += selection(human, computer);
+        para.textContent += rockTie();
         break;
     case "paper":
-        para.textContent = paperTie();
+        para.textContent += selection(human, computer);
+        para.textContent += paperTie();
         break;
     case "scissors":
-        para.textContent = scissorsTie();
-        
+        para.textContent += selection(human, computer);
+        para.textContent += scissorsTie();
         break;
    }
    resultDiv.appendChild(para);
@@ -125,35 +135,35 @@ function playRound(humanChoice,computerChoice){
     case "rock":
         if(computerChoice == "scissors"){
             humanScore++;
-            humanWin();
+            humanWin(humanChoice,computerChoice);
         }
         else if(computerChoice == "paper"){
             computerScore++;
-            computerWin();
+            computerWin(humanChoice,computerChoice);
         }
-        else{tie("rock");}
+        else{tie(humanChoice,computerChoice);}
         break
     case "paper":
         if(computerChoice == "rock"){
             humanScore++;
-            humanWin();
+            humanWin(humanChoice,computerChoice);
         }
         else if(computerChoice == "scissors"){
             computerScore++;
-            computerWin();
+            computerWin(humanChoice,computerChoice);
         }
-        else{tie("paper");}
+        else{tie(humanChoice,computerChoice);}
         break
     case "scissors":
         if(computerChoice == "paper"){
             humanScore++;
-            humanWin();
+            humanWin(humanChoice,computerChoice);
         }
         else if(computerChoice == "rock"){
             computerScore++;
-            computerWin();
+            computerWin(humanChoice,computerChoice);
         }
-        else{tie("scissors");}
+        else{tie(humanChoice,computerChoice);}
         break           
    }
 
@@ -173,15 +183,23 @@ function endGame(winner){
     switch(winner){
         case "human":
             finalText.classList.add(`winner${winner}`)
-            finalText.textContent = gameWinHuman();
+            finalText.textContent += gameWinHuman();
+            finalText.textContent += total();
+            endDelete();
             endFinal.appendChild(finalText);
             break;
         case "computer":
             finalText.classList.add(`winner${winner}`)
-            finalText.textContent = gameWinComputer();
+            finalText.textContent += gameWinComputer();
+            finalText.textContent += total();
+            endDelete();
             endFinal.appendChild(finalText);
             break; 
     }
+}
+
+function endDelete(){
+    game.remove();
 }
 
 

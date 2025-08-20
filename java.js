@@ -4,7 +4,6 @@ console.log("Hello World")
     let totalPlayed = 0;
 
     //in the let game ... i didn't add in the result and total games played into html.
-    //also calling endgame is being weird i just caught this and im going to sleep.
     //also could add da flex to the css but idk if i will.
 
 function computerRandom(){
@@ -92,7 +91,7 @@ function humanWin(){
    para.classList.add(`p${totalPlayed}`);
    para.textContent = winText();
    resultDiv.appendChild(para);
-   if (humanScore == 5){endGame("human");} 
+   if (humanScore === 5){endGame("human");} 
 }
 
 function computerWin(){
@@ -100,7 +99,7 @@ function computerWin(){
    para.classList.add(`p${totalPlayed}`);
    para.textContent = loseText();
    resultDiv.appendChild(para);
-   if (computerScore == 5){endGame("computer");} 
+   if (computerScore === 5){endGame("computer");} 
 }
 
 function tie(type){

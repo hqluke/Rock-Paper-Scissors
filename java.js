@@ -1,12 +1,20 @@
 console.log("Hello World")
     let humanScore = 0;
     let computerScore = 0;
+    let totalPlayed = 0;
 
+    //in the let game ... i didn't add in the result and total games played into html.
+    //also calling endgame is being weird i just caught this and im going to sleep.
+    //also could add da flex to the css but idk if i will.
+
+function computerRandom(){
+    return Math.floor(Math.random() * 3);
+}
 
 
 function getComputerChoice(){
     let computerChoice = "";
-    let cc = Math.floor(Math.random() * 3);
+    let cc = computerRandom();
    switch(cc){
     case 0:
         computerChoice = "rock";
@@ -22,26 +30,95 @@ function getComputerChoice(){
    return computerChoice;
    
 }
+    let game = document.querySelector("#button");
+    game.addEventListener('click', (event) => {
+        let target = event.target;
+        let hum;
+        switch(target.id) {
+        case 'rock':
+            hum = "rock";
+            console.log('Rock was clicked');
+            console.log(`-------Round Results-------\n`)
+            console.log(`player: ${hum}`)
+            computerSelection = getComputerChoice()
+            totalPlayed++;
+            playRound(hum,computerSelection);
+            break;
+        case 'paper':
+            hum = "paper";
+            console.log('Paper was clicked');
+            console.log(`-------Round Results-------\n`)
+            console.log(`player: ${hum}`)
+            computerSelection = getComputerChoice()
+            totalPlayed++;
+            playRound(hum,computerSelection);
+            break;
+        case 'scissors':
+            hum = "scissors";
+            console.log('Scissors was clicked');
+            console.log(`-------Round Results-------\n`)
+            console.log(`player: ${hum}`)
+            computerSelection = getComputerChoice()
+            totalPlayed++;
+            playRound(hum,computerSelection);
+            break;
+    }
+    });
+    
 
-function getHumanChoice(){
-    let hc = prompt("rock, paper, or scissors?\nwhat's your choice? ")
-    switch(hc.toLowerCase()){
+function winText() {
+  return `nice job!\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+}
+
+function loseText() {
+  return `LLLLLLLL\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+}
+
+function rockTie() {
+  return `You both picked rock.\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+}
+
+function paperTie() {
+  return `You both picked paper.\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+}
+
+function scissorsTie() {
+  return `You both picked scissors.\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+}
+
+let resultDiv = document.querySelector("#result")
+function humanWin(){
+   let para = document.createElement("p");
+   para.classList.add(`p${totalPlayed}`);
+   para.textContent = winText();
+   resultDiv.appendChild(para);
+   if (humanScore == 5){endGame("human");} 
+}
+
+function computerWin(){
+   let para = document.createElement("p");
+   para.classList.add(`p${totalPlayed}`);
+   para.textContent = loseText();
+   resultDiv.appendChild(para);
+   if (computerScore == 5){endGame("computer");} 
+}
+
+function tie(type){
+   let para = document.createElement("p");
+   para.classList.add(`p${totalPlayed}`);
+   switch(type){
     case "rock":
-        hc = "rock";
-        break
+        para.textContent = rockTie();
+        break;
     case "paper":
-        hc = "paper";
-        break
+        para.textContent = paperTie();
+        break;
     case "scissors":
-        hc = "scissors";
-        break  
-    default:
-        hc = "rock";
-        break;            
+        para.textContent = scissorsTie();
+        
+        break;
    }
-   console.log(`-------Round Results-------\n`)
-   console.log(`player: ${hc}`)
-   return hc;
+   resultDiv.appendChild(para);
 }
 
 function playRound(humanChoice,computerChoice){
@@ -49,59 +126,65 @@ function playRound(humanChoice,computerChoice){
     case "rock":
         if(computerChoice == "scissors"){
             humanScore++;
-            console.log(`nice job!\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★★★★★★★★★★★★★`)
+            humanWin();
         }
         else if(computerChoice == "paper"){
             computerScore++;
-            console.log(`LLLLLLLL\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★★★★★★★★★★★★★`)
+            computerWin();
         }
-        else{console.log(`You both picked rock.\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★★★★★★★★★★★★★`)}
+        else{tie("rock");}
         break
     case "paper":
         if(computerChoice == "rock"){
             humanScore++;
-            console.log(`nice job!\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★★★★★★★★★★★★★`)
+            humanWin();
         }
         else if(computerChoice == "scissors"){
             computerScore++;
-            console.log(`LLLLLLLL\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★★★★★★★★★★★★★`)
+            computerWin();
         }
-        else{console.log(`You both picked paper.\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★★★★★★★★★★★★★`)}
+        else{tie("paper");}
         break
     case "scissors":
         if(computerChoice == "paper"){
             humanScore++;
-            console.log(`nice job!\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★`)
+            humanWin();
         }
         else if(computerChoice == "rock"){
             computerScore++;
-            console.log(`LLLLLLLL\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★`)
+            computerWin();
         }
-        else{console.log(`You both picked scissors.\nYour score: ${humanScore}\nComputer score: ${computerScore}\n★★★★★★★★★★★★★★★★★★★★★★★★★★★`)}
+        else{tie("scissors");}
         break           
    }
 
 }
 
-function playGame(){
+function gameWinHuman() {
+  return `********Game Results*******\nYou Win!\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+}
+function gameWinComputer() {
+  return `********Game Results*******\nYou Lost! LLLLLLL\nYour score: ${humanScore}\nComputer score: ${computerScore}\n`;
+}
 
-    for(i = 0; i < 5; i++){
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice()
-    playRound(humanSelection,computerSelection);
-    }
+const endFinal = document.querySelector("#endgame");
 
-
-    if(humanScore > computerScore){
-        console.log(`********Game Results*******\nYou Win!\nYour score: ${humanScore}\nComputer score: ${computerScore}\n✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬`)
-    }
-    else if (computerScore > humanScore){
-        console.log(`********Game Results*******\nYou Lost! LLLLLLL\nYour score: ${humanScore}\nComputer score: ${computerScore}\n✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬`)
-    }
-    else{
-        console.log(`********Game Results*******\nThis is awkward;\nyou both tied.\nYour score: ${humanScore}\nComputer score: ${computerScore}\n✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬✬`)
+function endGame(winner){
+    let finalText = document.createElement("p");
+    switch(winner){
+        case "human":
+            finalText.classList.add(`winner${winner}`)
+            finalText.textContent = gameWinHuman();
+            endFinal.appendChild(finalText);
+            break;
+        case "computer":
+            finalText.classList.add(`winner${winner}`)
+            finalText.textContent = gameWinComputer();
+            endFinal.appendChild(finalText);
+            break; 
     }
 }
 
-playGame();
+
+
 
